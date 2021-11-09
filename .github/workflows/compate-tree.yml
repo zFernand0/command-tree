@@ -1,0 +1,58 @@
+# This workflow will do a clean install of node dependencies, build the source code and run tests across different versions of node
+# For more information see: https://help.github.com/actions/language-and-framework-guides/using-nodejs-with-github-actions
+
+name: Compare Plugin Versions
+
+on:
+  push:
+  workflow_dispatch:
+    inputs:
+      node-version:
+        description: "Node Version"
+        default: "16.x"
+        required: false
+      cli-version:
+        description: "Zowe CLI Version"
+        default: "zowe-v1-lts"
+        required: false
+      plugin-name:
+        description: "Name of the plugin to compare"
+        required: true
+      plugin-versions:
+        description: "Versions of the plugin to compare (comma-separated)"
+        required: true
+
+jobs:
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+
+    - name: Use Node.js 16.x
+      uses: actions/setup-node@v2
+      with:
+        node-version: 16.x
+
+    - name: Install Project Depenpendencies
+      run: npm ci
+
+    # Setup Action
+    # - npm i -g @zowe/cli@${version}
+    # - zowe --ac --rfj > zowe.json
+    # - zowe plugins install ${name}@${v1}
+    # - zowe --ac --rfj > pluginV1.json
+    # - zowe plugins install ${name}@${v2}
+    # - zowe --ac --rfj > pluginV2.json
+
+    # Compare Action
+    # - pg1: diff(p1 to z)
+    # - pg2: diff(p2 to z)
+    # - pg2.contains(pg1)
+
+
+
